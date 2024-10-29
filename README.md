@@ -18,6 +18,9 @@ Graphical interface(GUI) based on hexo's fluid theme. This is a project for faci
 
 ## ⚡️ Requirements
 
+- Fluid >= 1.9.8
+- Hexo >= 5.0.0
+- Git >= 2.47.0
 - Python >= 3.13.0
 - Python package:
 
