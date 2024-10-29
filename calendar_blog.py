@@ -258,7 +258,6 @@ button_frame.pack(pady=10)
 # 创建启动和终止按钮
 btn_deploy = tk.Button(button_frame, text="Deploy", command=lambda: execute_script("deploy", r"E:\ChenHuaneng\Article\Blogs", "deploy.ps1", btn_deploy))
 btn_local = tk.Button(button_frame, text="Local", command=lambda: execute_script("local", r"E:\ChenHuaneng\Article\Blogs", "local.ps1", btn_local))
-# btn_create = tk.Button(button_frame, text="Create", command=lambda: execute_script("create_new_post", r"E:\ChenHuaneng\Article\Blogs", "create_new_post.py", btn_create))
 
 btn_create = tk.Button(button_frame, text="Create", command=lambda: create_hexo_post(simpledialog.askstring("创建新文章", "请输入文章名称:")))
 
