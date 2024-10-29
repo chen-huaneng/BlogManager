@@ -19,22 +19,21 @@ Graphical interface(GUI) based on hexo's fluid theme. This is a project for faci
 ## ⚡️ Requirements
 
 - Python >= 3.13.0
-
 - Python package:
-  Package                   Version
 
-  ------------------------- --------
-  altgraph                  0.17.4
-  babel                     2.16.0
-  packaging                 24.1
-  pefile                    2023.2.7
-  pip                       24.2
-  pyinstaller               6.11.0
-  pyinstaller-hooks-contrib 2024.9
-  pywin32-ctypes            0.2.3
-  setuptools                75.1.0
-  tkcalendar                1.6.1
-  wheel                     0.44.0
+| Package                   | Version  |
+| ------------------------- | -------- |
+| altgraph                  | 0.17.4   |
+| babel                     | 2.16.0   |
+| packaging                 | 24.1     |
+| pefile                    | 2023.2.7 |
+| pip                       | 24.2     |
+| pyinstaller               | 6.11.0   |
+| pyinstaller-hooks-contrib | 2024.9   |
+| pywin32-ctypes            | 0.2.3    |
+| setuptools                | 75.1.0   |
+| tkcalendar                | 1.6.1    |
+| wheel                     | 0.44.0   |
 
 ## 🚀 Getting Started
 
