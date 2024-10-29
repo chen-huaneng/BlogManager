@@ -4,59 +4,54 @@ from tkcalendar import Calendar
 import os
 import datetime
 import subprocess
-import shutil
+import webbrowser
 from blog_icon import iconb64
 from PIL import ImageTk
 from base64 import b64decode
+import shutil
 
-# 用于保存正在运行的进程
 running_processes = {}
 
 def execute_script(script_name, script_path, file_name, button):
     global running_processes
     try:
-        # 更改按钮状态为“Terminate”
         button.config(text="Terminate", bg="red", command=lambda: terminate_process(script_name, button))
 
-        # 启动 PowerShell 脚本
         command = f"Set-Location '{script_path}'; .\\{file_name}"
-        # running_process = subprocess.Popen(["pwsh", "-NoProfile", "-NoLogo", "-Command", command])
         running_process = subprocess.Popen(["pwsh", "-NoLogo", "-Command", command])
-
-        # 保存进程ID到字典
         running_processes[script_name] = (running_process, button)
 
-        # 监控脚本状态并在完成时还原按钮
+        if script_name == "local":
+            show_open_button()
+
         root.after(100, lambda: check_process(script_name, button))
     except Exception as e:
         print(f"启动 PowerShell 时出错: {e}")
 
 def check_process(script_name, button):
-    # 检查进程是否仍在运行
     if script_name in running_processes:
         process, button = running_processes[script_name]
         if process.poll() is None:
-            # 继续检查
             root.after(100, lambda: check_process(script_name, button))
         else:
-            # 脚本已结束，恢复按钮状态
             restore_button(button, script_name)
 
 def terminate_process(script_name, button):
-    # 使用 taskkill 命令来终止进程
     if script_name in running_processes:
         process, button = running_processes[script_name]
-        os.system(f'taskkill /t /f /pid {process.pid}') # 异步执行如果使用 kill() 只会终止 Powershell 的进程, 但是不会终止 Python 的进程
+        os.system(f'taskkill /t /f /pid {process.pid}')
         print(f"{script_name} 已终止。")
         del running_processes[script_name]
-    # 恢复按钮状态
+    
     restore_button(button, script_name)
 
 def restore_button(button, script_name):
-    # 如果按钮存在，则恢复按钮的初始状态
     if button:
         button.config(text=script_name.capitalize(), bg="SystemButtonFace",
                       command=lambda: execute_script(script_name, r"E:\ChenHuaneng\Article\Blogs", f"{script_name}.ps1", button))
+    
+    if script_name == "local":
+        hide_open_button()
 
 def terminate_all_processes():
     global running_processes
@@ -64,10 +59,18 @@ def terminate_all_processes():
         terminate_process(script_name, None)
     print("所有脚本已终止。")
 
+def show_open_button():
+    btn_open.pack(side=tk.LEFT, padx=5)
+
+def hide_open_button():
+    btn_open.pack_forget()
+
+def open_localhost():
+    webbrowser.open("http://localhost:8080")
+
 def on_closing():
     terminate_all_processes()
     root.destroy()
-
 def open_folder(year, month, day):
     # 构建文件夹路径
     folder_path = f"E:\\ChenHuaneng\\Article\\Blogs\\source\\_posts\\{year}\\{month:d}\\{day:d}"
@@ -270,11 +273,14 @@ root.protocol("WM_DELETE_WINDOW", on_closing)
 button_frame = tk.Frame(root)
 button_frame.pack(pady=10)
 
-# 创建启动和终止按钮
+# 创建按钮
 btn_deploy = tk.Button(button_frame, text="Deploy", command=lambda: execute_script("deploy", r"E:\ChenHuaneng\Article\Blogs", "deploy.ps1", btn_deploy))
 btn_local = tk.Button(button_frame, text="Local", command=lambda: execute_script("local", r"E:\ChenHuaneng\Article\Blogs", "local.ps1", btn_local))
-
 btn_create = tk.Button(button_frame, text="Create", command=lambda: create_hexo_post(simpledialog.askstring("创建新文章", "请输入文章名称:")))
+btn_open = tk.Button(button_frame, text="Open", command=open_localhost)
+
+# 初始时隐藏 "Open" 按钮
+hide_open_button()
 
 # 横向排布按钮
 btn_deploy.pack(side=tk.LEFT, padx=5)
