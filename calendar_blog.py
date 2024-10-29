@@ -5,6 +5,9 @@ import os
 import datetime
 import subprocess
 import shutil
+from blog_icon import iconb64
+from PIL import ImageTk
+from base64 import b64decode
 
 # 用于保存正在运行的进程
 running_processes = {}
@@ -228,6 +231,18 @@ root.resizable(False, False)
 
 # 设置窗口居中
 center_window(root, 400, 300)
+
+# 硬编码图标
+icon_img = iconb64()
+icon_img = b64decode(icon_img)
+icon_img = ImageTk.PhotoImage(data=icon_img)
+root.tk.call('wm', 'iconphoto', root._w, icon_img)
+
+# 设置图标
+root.iconbitmap("icon.ico")
+
+# 修改任务栏图标
+root.wm_iconbitmap("icon.ico")
 
 # 创建日历
 calendar = Calendar(
