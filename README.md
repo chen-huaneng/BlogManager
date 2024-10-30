@@ -30,6 +30,7 @@ Graphical interface(GUI) based on hexo's fluid theme. This is a project for faci
 | babel                     | 2.16.0   |
 | packaging                 | 24.1     |
 | pefile                    | 2023.2.7 |
+| pillow                    | 11.0.0   |
 | pip                       | 24.2     |
 | pyinstaller               | 6.11.0   |
 | pyinstaller-hooks-contrib | 2024.9   |
