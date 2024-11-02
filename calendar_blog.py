@@ -93,8 +93,8 @@ def create_hexo_post(post_name):
 
         # 定义文件路径
         base_dir = r"E:\ChenHuaneng\Article\Blogs\source"
-        post_dir = os.path.join(base_dir, "_posts", year, month, day)
-        img_dir = os.path.join(base_dir, "imgs", "posts", year, month, day)
+        post_dir = os.path.join(base_dir, "_posts", year, month, day.lstrip('0'))
+        img_dir = os.path.join(base_dir, "imgs", "posts", year, month, day.lstrip('0'))
 
         # 创建日期文件夹（如果不存在）
         if not os.path.exists(post_dir):
@@ -163,7 +163,7 @@ def modify_markdown_file(file_path, post_filename, year, month, day):
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
 
-    date_str = f"{year}/{month}/{day}"
+    date_str = f"{int(year)}/{int(month)}/{int(day)}"
     content = content.replace("/imgs/posts/year/month/day/banner.", f"/imgs/posts/{date_str}/banner.")
     file_name_without_extension = post_filename[:-3]
     content = content.replace("[[filename]]", file_name_without_extension)
