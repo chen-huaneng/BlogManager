@@ -159,17 +159,22 @@ def create_hexo_post(post_name):
         print("\n程序已被用户中止。")
 
 def modify_markdown_file(file_path, post_filename, year, month, day):
-    """修改生成的 Markdown 文件，更新图片路径和 typora-root-url"""
+    """ 修改生成的 Markdown 文件，更新 banner_img 和 index_img 中的日期，以及 typora-root-url """
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
 
-    date_str = f"{int(year)}/{int(month)}/{int(day)}"
+    # 替换日期的占位符
+    date_str = f"{year}/{month}/{day}"
     content = content.replace("/imgs/posts/year/month/day/banner.", f"/imgs/posts/{date_str}/banner.")
-    file_name_without_extension = post_filename[:-3]
-    content = content.replace("[[filename]]", file_name_without_extension)
 
+    # 获取文件名不带后缀
+    file_name_without_extension = post_filename[:-3]  # 去掉 .md 后缀
+    content = content.replace("[[filename]]", file_name_without_extension)  # 替换 [[filename]]
+
+    # 将修改后的内容写回文件
     with open(file_path, 'w', encoding='utf-8') as file:
         file.write(content)
+
     print(f"已更新 Markdown 文件中的图片路径和 typora-root-url.")
 
 def open_file(file_path):
