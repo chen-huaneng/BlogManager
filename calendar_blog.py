@@ -71,13 +71,14 @@ def open_localhost():
 def on_closing():
     terminate_all_processes()
     root.destroy()
+
 def open_folder(year, month, day):
-    # 构建文件夹路径
-    folder_path = f"E:\\ChenHuaneng\\Article\\Blogs\\source\\_posts\\{year}\\{month:d}\\{day:d}"
+    # 构建文件夹路径，确保月份和日期为两位数
+    folder_path = f"E:\\ChenHuaneng\\Article\\Blogs\\source\\_posts\\{year}\\{month:02d}\\{day:02d}"
     if os.path.exists(folder_path):
         os.startfile(folder_path)
     else:
-        messagebox.showinfo("Info", f"{year}-{month:d}-{day:d} 没有对应的文件夹")
+        messagebox.showinfo("Info", f"{year}-{month:02d}-{day:02d} 没有对应的文件夹")
 
 def create_hexo_post(post_name):
     if not post_name:
@@ -200,15 +201,14 @@ def check_dates():
     # 遍历当月的每一天
     for day in range(1, 32):  # 最多31天
         try:
-        # 检查是否为有效日期
+            # 检查是否为有效日期
             date = datetime.date(year, month, day)
-            folder_path = f"E:\\ChenHuaneng\\Article\\Blogs\\source\\_posts\\{year}\\{month:d}\\{day:d}"
+            folder_path = f"E:\\ChenHuaneng\\Article\\Blogs\\source\\_posts\\{year}\\{month:02d}\\{day:02d}"
             if os.path.exists(folder_path):
                 calendar.calevent_create(date, "有文件夹", "exists")  # 添加事件标记
                 calendar.tag_config("exists", background="lightgreen")
         except ValueError:
             # 跳过无效日期
-            # print("error")
             continue
 
 def on_click(event):
