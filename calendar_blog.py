@@ -5,10 +5,8 @@ import os
 import datetime
 import subprocess
 import webbrowser
-from blog_icon import iconb64
-from PIL import ImageTk
-from base64 import b64decode
 import shutil
+import sys
 
 running_processes = {}
 
@@ -94,8 +92,8 @@ def create_hexo_post(post_name):
 
         # 定义文件路径
         base_dir = r"E:\ChenHuaneng\Article\Blogs\source"
-        post_dir = os.path.join(base_dir, "_posts", year, month, day.lstrip('0'))
-        img_dir = os.path.join(base_dir, "imgs", "posts", year, month, day.lstrip('0'))
+        post_dir = os.path.join(base_dir, "_posts", year, month, day)
+        img_dir = os.path.join(base_dir, "imgs", "posts", year, month, day)
 
         # 创建日期文件夹（如果不存在）
         if not os.path.exists(post_dir):
@@ -153,14 +151,14 @@ def create_hexo_post(post_name):
         open_file(new_post_path)
 
         # 打开图片和文章所在的文件夹
-        open_folder_create(img_dir)
-        open_folder_create(post_dir)
+        open_folder_path(img_dir)
+        open_folder_path(post_dir)
 
     except KeyboardInterrupt:
         print("\n程序已被用户中止。")
 
 def modify_markdown_file(file_path, post_filename, year, month, day):
-    """ 修改生成的 Markdown 文件，更新 banner_img 和 index_img 中的日期，以及 typora-root-url """
+    """修改生成的 Markdown 文件，更新 banner_img 中的日期，以及 typora-root-url"""
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
 
@@ -181,18 +179,27 @@ def modify_markdown_file(file_path, post_filename, year, month, day):
 def open_file(file_path):
     """打开指定文件"""
     if os.path.exists(file_path):
-        os.startfile(file_path)
+        if os.name == 'nt':  # Windows
+            os.startfile(file_path)
+        elif os.name == 'posix':  # macOS/Linux
+            opener = "open" if sys.platform == "darwin" else "xdg-open"
+            subprocess.call([opener, file_path])
         print(f"已打开文件: {file_path}")
     else:
         print(f"文件不存在: {file_path}")
 
-def open_folder_create(folder_path):
+def open_folder_path(folder_path):
     """打开指定文件夹"""
     if os.path.exists(folder_path):
-        os.startfile(folder_path)
+        if os.name == 'nt':  # Windows
+            os.startfile(folder_path)
+        elif os.name == 'posix':  # macOS/Linux
+            opener = "open" if sys.platform == "darwin" else "xdg-open"
+            subprocess.call([opener, folder_path])
         print(f"已打开文件夹: {folder_path}")
     else:
         print(f"文件夹不存在: {folder_path}")
+# ============= 整合结束 =============
 
 def check_dates():
     # 获取当前显示的年份和月份
@@ -239,18 +246,6 @@ root.resizable(False, False)
 
 # 设置窗口居中
 center_window(root, 400, 300)
-
-# 硬编码图标
-icon_img = iconb64()
-icon_img = b64decode(icon_img)
-icon_img = ImageTk.PhotoImage(data=icon_img)
-root.tk.call('wm', 'iconphoto', root._w, icon_img)
-
-# 设置图标
-root.iconbitmap("icon.ico")
-
-# 修改任务栏图标
-root.wm_iconbitmap("icon.ico")
 
 # 创建日历
 calendar = Calendar(
