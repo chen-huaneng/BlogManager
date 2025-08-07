@@ -93,7 +93,6 @@ def create_hexo_post(post_name):
         # 定义文件路径
         base_dir = r"E:\ChenHuaneng\Article\Blogs\source"
         post_dir = os.path.join(base_dir, "_posts", year, month, day)
-        img_dir = os.path.join(base_dir, "imgs", "posts", year, month, day)
 
         # 创建日期文件夹（如果不存在）
         if not os.path.exists(post_dir):
@@ -101,12 +100,6 @@ def create_hexo_post(post_name):
             print(f"创建文章文件夹: {post_dir}")
         else:
             print(f"文章文件夹已存在: {post_dir}")
-
-        if not os.path.exists(img_dir):
-            os.makedirs(img_dir)
-            print(f"创建图片文件夹: {img_dir}")
-        else:
-            print(f"图片文件夹已存在: {img_dir}")
 
         # 检查同名文件是否存在
         while True:
@@ -134,7 +127,7 @@ def create_hexo_post(post_name):
                 if os.path.exists(post_path):
                     shutil.move(post_path, new_post_path)
                     print(f"文章已创建并移动到: {new_post_path}")
-                    modify_markdown_file(new_post_path, post_filename, year, month, day)
+                    modify_markdown_file(new_post_path, post_filename)
                 else:
                     print(f"未找到要移动的文章文件: {post_path}")
 
@@ -151,20 +144,15 @@ def create_hexo_post(post_name):
         open_file(new_post_path)
 
         # 打开图片和文章所在的文件夹
-        open_folder_path(img_dir)
         open_folder_path(post_dir)
 
     except KeyboardInterrupt:
         print("\n程序已被用户中止。")
 
-def modify_markdown_file(file_path, post_filename, year, month, day):
-    """修改生成的 Markdown 文件，更新 banner_img 中的日期，以及 typora-root-url"""
+def modify_markdown_file(file_path, post_filename):
+    """修改生成的 Markdown 文件的 typora-root-url"""
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
-
-    # 替换日期的占位符
-    date_str = f"{year}/{month}/{day}"
-    content = content.replace("/imgs/posts/year/month/day/banner.", f"/imgs/posts/{date_str}/banner.")
 
     # 获取文件名不带后缀
     file_name_without_extension = post_filename[:-3]  # 去掉 .md 后缀
